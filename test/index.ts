@@ -64,7 +64,7 @@ test('last function should produce last element of array', () => {
 });
 
 test('gakError should throw error', () => {
-  expect(() => util.gakError('test')).to.throw(Error);
+  expect(() => util.eventRankError('test')).to.throw(Error);
 });
 
 test('ensureArray should wrap object with array if necessary', () => {

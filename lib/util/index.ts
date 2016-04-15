@@ -7,7 +7,7 @@
  */
 export function assert(bool: boolean, message: string, event?: any): void {
   if (!bool) {
-    gakError(`Assertion failed${message ? (': ' + message) : ''}`, event);
+    eventRankError(`Assertion failed${message ? (': ' + message) : ''}`, event);
   }
 }
 
@@ -41,8 +41,8 @@ export function last<T>(arr: T[]): T {
  * @param  {Object} [event] (optional) Event object
  * @return {undefined}
  */
-export function gakError(message: string, event?: any) {
-  message = `gak.js | ${message}`;
+export function eventRankError(message: string, event?: any) {
+  message = `event-rank | ${message}`;
   if (event) {
     const pretty = JSON.stringify(event, null, 2);
     message = `${message} | Last Processed Event: \n${pretty}`;
@@ -53,7 +53,7 @@ export function gakError(message: string, event?: any) {
 
 export default {
   assert,
-  gakError,
+  eventRankError,
   last,
   ensureArray
 }

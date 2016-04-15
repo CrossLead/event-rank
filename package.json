@@ -6,6 +6,9 @@
   "typings": "./dist/node4/lib/index.d.ts",
   "scripts": {
     "babel": "bash -c \"./node_modules/.bin/babel ./dist/es6 --out-dir ./dist/node4\"",
+    "watch-babel": "bash -c \"./node_modules/.bin/babel --watch ./dist/es6 --out-dir ./dist/node4\"",
+    "watch-tsc": "bash -c \"./node_modules/typescript/bin/tsc -w -d -p ./\"",
+    "watch": "bash -c \"./node_modules/.bin/concurrently --kill-others 'npm run watch-babel' 'npm run watch-tsc'\"",
     "build": "bash -c \"rm -rf ./dist/\" && npm run typings && npm run lint && npm run tscompile && npm run babel",
     "pretest": "npm run build",
     "prepublish": "npm test",
@@ -46,6 +49,7 @@
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
     "chai": "^3.5.0",
+    "concurrently": "^2.0.0",
     "gh-pages": "^0.10.0",
     "gulp": "^3.9.1",
     "jasmine-core": "^2.4.1",

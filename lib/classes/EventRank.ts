@@ -8,7 +8,6 @@
  */
 import { assert, ensureArray } from '../util/index';
 
-
 export type EventItem = {
   time: number;
   to?: string | string[];
@@ -183,11 +182,6 @@ export class EventRank {
       ranks = EventRank.startRanks(correspondents);
     }
 
-    if (!correspondanceMatrix) {
-      correspondanceMatrix = <CorrespondanceMatrix> correspondents
-        .reduce((o, c) => (o[c] = {}, o), <Hash<any>>{});
-    }
-
     // add properties
     Object.assign(this, {
       G, H, f, model,
@@ -198,10 +192,19 @@ export class EventRank {
       Vα : []
     });
 
+    if (!correspondanceMatrix) {
+      this.resetCorrespondanceMatrix();
+    }
+
     this.setInclude(include);
     this.correspondents = this.correspondents.filter(this.include.has.bind(this.include));
   }
 
+
+  resetCorrespondanceMatrix() {
+    this.correspondanceMatrix = <CorrespondanceMatrix> this.correspondents
+      .reduce((o, c) => (o[c] = {}, o), <Hash<any>>{});
+  }
 
 
   /**
@@ -409,7 +412,7 @@ export class EventRank {
       const capture  = bucket === 'capture';
       const apply    = bucket === 'apply';
       const isBucket = capture || apply;
-      const watching = this.include.has.bind(this.include);
+      const watching = <typeof Set.prototype.has> this.include.has.bind(this.include);
 
       // unpack model weight parameters + ranks + correspondents
       const {
@@ -505,6 +508,10 @@ export class EventRank {
         // time difference (recipient) is
         // between now and minimum determined time above
         Δtr = time - trMin;
+
+        if (Δts < 0) {
+          console.log(sender, CM[sender], time);
+        }
 
         // assert that time differentials are not negative
         // (can't send/recieve messages in the future!)
