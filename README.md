@@ -1,6 +1,6 @@
 ## EventRank
 
-[![npm version](https://badge.fury.io/js/EventRank.svg)](http://badge.fury.io/js/EventRank)
+[![npm version](https://badge.fury.io/js/event-rank.svg)](http://badge.fury.io/js/event-rank)
 [![Build Status](https://travis-ci.org/CrossLead/EventRank.svg?branch=master)](https://travis-ci.org/CrossLead/EventRank)
 
 ### Overview
