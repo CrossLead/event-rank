@@ -2,7 +2,7 @@ node_modules/*
 bower_components/*
 papers/*
 dist/*
-!dist/node/*
+!dist/node4/*
 test/*
 esdoc/*
 .publish/*
