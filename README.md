@@ -17,10 +17,6 @@
 npm install --save event-rank
 ```
 
-##### bower
-```shell
-bower install --save event-rank
-```
 
 ### Usage
 

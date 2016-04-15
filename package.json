@@ -19,6 +19,9 @@
     "type": "git",
     "url": "https://github.com/CrossLead/EventRank.git"
   },
+  "engines": {
+    "node": ">=4.3.0"
+  },
   "keywords": [
     "graph",
     "network",
