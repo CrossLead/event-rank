@@ -1,0 +1,68 @@
+{
+  "name": "EventRank",
+  "version": "0.0.1",
+  "description": "EventRank implementation in TypeScript",
+  "main": "./dist/node4/index.js",
+  "scripts": {
+    "babel": "bash -c \"./node_modules/.bin/babel ./dist/es6 --out-dir ./dist/node4\"",
+    "build": "bash -c \"rm -rf ./dist/\" && npm run typings && npm run lint && npm run tscompile && npm run babel",
+    "pretest": "npm run build",
+    "prepublish": "npm test",
+    "test": "bash -c \"./node_modules/.bin/ava\"",
+    "tscompile": "bash -c \"./node_modules/typescript/bin/tsc -d -p ./\"",
+    "typings": "./node_modules/.bin/typings install",
+    "docs": "bash -c \"rm -rf ./docs/ && ./node_modules/typedoc/bin/typedoc --mode file --theme default --experimentalAsyncFunctions --target es6 --out ./docs/ ./lib/ && touch ./docs/.nojekyll\"",
+    "gh-pages": "npm run docs && ./node_modules/gh-pages/bin/gh-pages --dotfiles true -d ./docs/",
+    "lint": "bash -c \"./node_modules/tslint/bin/tslint -c ./tslint.json ./{test,lib}/**/*.ts && echo '> \\033[0;32mlinter passed!\\033[0m'\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CrossLead/EventRank.git"
+  },
+  "keywords": [
+    "graph",
+    "network",
+    "link",
+    "analysis",
+    "clustering"
+  ],
+  "author": "Ben Southgate",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/CrossLead/EventRank/issues"
+  },
+  "homepage": "https://github.com/CrossLead/EventRank",
+  "devDependencies": {
+    "ava": "^0.14.0",
+    "babel-cli": "^6.5.1",
+    "babel-core": "^6.5.2",
+    "babel-polyfill": "^6.5.0",
+    "babel-preset-es2015-node4": "2.0.3",
+    "babel-register": "^6.5.2",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
+    "chai": "^3.5.0",
+    "gh-pages": "^0.10.0",
+    "gulp": "^3.9.1",
+    "jasmine-core": "^2.4.1",
+    "moment": "^2.12.0",
+    "mongodb": "^2.1.14",
+    "ts-node": "^0.5.5",
+    "tslint": "^3.5.0",
+    "typedoc": "^0.3.12",
+    "typescript": "1.8.7",
+    "typings": "^0.7.9",
+    "uglifyjs": "^2.4.10"
+  },
+  "babel": {
+    "presets": [
+      "es2015-node4"
+    ],
+    "sourceMaps": true
+  },
+  "ava": {
+    "files": [
+      "dist/node4/test/**/*.js"
+    ]
+  }
+}

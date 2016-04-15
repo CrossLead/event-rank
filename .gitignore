@@ -1,0 +1,13 @@
+node_modules/*
+bower_components/*
+papers/*
+dist/*
+!dist/browser/gak.js
+!dist/browser/gak.min.js
+!dist/browser/gak.js.map
+test/enron/*
+!test/enron/run.js
+!test/enron/enron.py
+!test/enron/export-mongo-enron.sh
+esdoc/*
+.publish/*

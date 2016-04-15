@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution" : "node",
+    "declaration": false,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "removeComments": true,
+    "noLib": false,
+    "outDir": "./dist/es6",
+    "inlineSourceMap": true
+  },
+  "exclude": [
+    "node_modules",
+    "scripts",
+    "typings",
+    "dist"
+  ]
+}

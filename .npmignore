@@ -1,0 +1,8 @@
+node_modules/*
+bower_components/*
+papers/*
+dist/*
+!dist/node/*
+test/*
+esdoc/*
+.publish/*
