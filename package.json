@@ -1,5 +1,5 @@
 {
-  "name": "EventRank",
+  "name": "event-rank",
   "version": "0.0.1",
   "description": "EventRank implementation in TypeScript",
   "main": "./dist/node4/index.js",
