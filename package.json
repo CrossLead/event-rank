@@ -1,6 +1,6 @@
 {
   "name": "event-rank",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "EventRank implementation in TypeScript",
   "main": "./dist/node4/src/index.js",
   "typings": "./dist/node4/src/index.d.ts",
