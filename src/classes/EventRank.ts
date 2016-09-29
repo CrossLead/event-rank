@@ -6,7 +6,7 @@
  *
  * PDF: http://www.datalab.uci.edu/papers/linkkdd05-02.pdf
  */
-import { assert, ensureArray } from '../util/index';
+import { eventRankError, ensureArray } from '../util/index';
 
 export type EventItem = {
   time: number;
@@ -25,6 +25,12 @@ export type TimeUpdate = Hash<{
   recieved?: Hash<number>;
   sent?: number;
 }>;
+
+
+export type Bucket = {
+  time: number,
+  events: EventItem[]
+}
 
 
 export type Hash<T> = { [key: string]: T };
@@ -87,7 +93,7 @@ export class EventRank {
 
     for (let i = 0, l = events.length; i < l; i++) {
       const event = events[i],
-            to = event.to;
+            to = event.to || [];
 
       outSet.add(event.from);
 
@@ -167,8 +173,9 @@ export class EventRank {
       include
     } = opts;
 
-
-    assert(modelTypes.has(model), 'Unexpected model type: ' + model);
+    if (!modelTypes.has(model)) {
+      eventRankError(`Assertion failed: Unexpected model type: ${model}`);
+    }
 
     // get ranks if passed
     let { ranks, correspondents, correspondanceMatrix } = opts;
@@ -212,10 +219,11 @@ export class EventRank {
    */
   setInclude(include?: Set<string> | string[]) {
     include = include || this.correspondents;
-    assert(
-      Array.isArray(include) || (include instanceof Set),
-      'include needs to be a Set or an Array, but got: ' + include
-    );
+
+    if (!(Array.isArray(include) || (include instanceof Set))) {
+      eventRankError(`include needs to be a Set or an Array, but got: ${include}`);
+    }
+
     this.include = new Set(include);
     return this;
   }
@@ -314,12 +322,12 @@ export class EventRank {
   /**
    * Get ranks of given ids at current period
    *
-   * @param {Array<String> | String} [ids] combination of str and array<str> of ids
+   * @param {Array<String>} [ids] combination of str and array<str> of ids
    * @return {Array<Object>} ranks of (ids) at current period
    */
   get(...ids: string[]) {
     // catchup these individuals
-    this.catchUp(ids = [].concat(...ids));
+    this.catchUp(ids);
     return ids.map(id => (Object.assign({ id }, this.ranks[id])));
   }
 
@@ -379,6 +387,10 @@ export class EventRank {
   }
 
 
+  isBucket(b: any): b is Bucket {
+    return b && b.time && Array.isArray(b.events)
+  }
+
 
   /**
    * Calculate new ranks given an additional event
@@ -387,7 +399,7 @@ export class EventRank {
    * @param  {String} [bucket] (optional) bucketMode option (capture | apply)
    * @return {EventRank} return self for chaining
    */
-  step(event: EventItem | EventItem[], bucket?: 'capture' | 'apply') {
+  step(event: EventItem | EventItem[] | Bucket, bucket?: 'capture' | 'apply') {
 
     // if event is acutally an array of events, step through all
     if (Array.isArray(event)) {
@@ -398,7 +410,7 @@ export class EventRank {
     } else {
 
       // if event is an event bucket run through time bucket
-      if (event.events) {
+      if (this.isBucket(event)) {
         const events = event.events,
               n = event.events.length - 1;
 
@@ -424,7 +436,7 @@ export class EventRank {
       } = this;
 
       // unpack event, create set of participants
-      const { to, from : sender, time } = event;
+      const { to = [], from : sender, time } = event;
 
       // if the sender is not in the include set, skip
       if (!watching(sender)) {
@@ -434,9 +446,9 @@ export class EventRank {
       // set of participants (only include those in "include")
       const recipients = new Set(ensureArray(to).filter(watching));
 
-      assert(!!sender,    'no event in sender!',                event);
-      assert(!!to.length, 'no recipients of event!',            event);
-      assert(!!time,      'no recorded time (or time === 0)!',  event);
+      if (!sender) return eventRankError('no sender in event!', event);
+      if (!to.length) return eventRankError('no recipients of event!', event);
+      if (!time) return eventRankError('no recorded time (or time === 0)!', event);
 
       // if the sender sends themself an email...
       recipients.delete(sender);
@@ -446,7 +458,7 @@ export class EventRank {
         return this;
       }
 
-      let timeUpdates: TimeUpdate;
+      let timeUpdates: TimeUpdate | undefined;
       if (isBucket) {
         timeUpdates = this.timeUpdates = this.timeUpdates || <TimeUpdate> {};
         timeUpdates[sender] = timeUpdates[sender] || {recieved: {}};
@@ -465,8 +477,8 @@ export class EventRank {
       this.catchUp(recipientArray);
 
       // time differentials (for reply model)
-      let Δts: number,
-          Δtr: number;
+      let Δts: number = -1,
+          Δtr: number = -1;
 
       if (model === 'reply') {
 
@@ -476,7 +488,7 @@ export class EventRank {
         Δts = time - (lagSender.sent || -Infinity);
 
         // record current time as most recent send event by sender
-        if (isBucket) {
+        if (isBucket && timeUpdates) {
           timeUpdates[sender].sent = time;
         } else {
           lagSender.sent = time;
@@ -498,8 +510,9 @@ export class EventRank {
 
           // if processing bucket, don't apply time updates
           // until all events in bucket have been processed
-          if (isBucket) {
-            timeUpdates[sender].recieved[recipient] = time;
+          if (isBucket && timeUpdates) {
+            const s = timeUpdates[sender]
+            if (s && s.recieved) s.recieved[recipient] = time;
           } else {
             tr[recipient] = time;
           }
@@ -515,8 +528,8 @@ export class EventRank {
 
         // assert that time differentials are not negative
         // (can't send/recieve messages in the future!)
-        assert(Δts >= 0, 'Δts must not be negative: Δts = ' + Δts, event);
-        assert(Δtr >= 0, 'Δtr must not be negative: Δtr = ' + Δtr, event);
+        if (!(Δts >= 0)) return eventRankError(`Δts must not be negative: Δts = ${Δts}`, event);
+        if (!(Δtr >= 0)) return eventRankError(`Δtr must not be negative: Δtr = ${Δtr}`, event);
       }
 
       // start sum with sender rank
@@ -529,7 +542,9 @@ export class EventRank {
 
       // Safety check to ensure that the sum should be within (0, 1)
       // not exact due to floating point issues...
-      assert(ΣR <= 1.000000000000009 && ΣR >= 0, 'ΣR must be in (0, 1): ΣR = ' + ΣR, event);
+      if (!(ΣR <= 1.000000000000009 && ΣR >= 0)) {
+        return eventRankError(`ΣR must be in (0, 1): ΣR = ${ΣR}`, event);
+      }
 
       if (ΣR > 1) {
         ΣR = 1;
@@ -554,7 +569,7 @@ export class EventRank {
       α *= Tn;
 
       // safety check for bounds of α
-      assert(α <= 1 && α >= 0, 'α must be in (0, 1): α = ' + α, event);
+      if (!(α <= 1 && α >= 0)) return eventRankError(`α must be in (0, 1): α = ${α}`, event);
 
       // sum of additive inverse of ranks of participants
       const ΣRbar = nP - ΣR;
@@ -588,6 +603,8 @@ export class EventRank {
 
           cmS.recieved = cmS.recieved || {};
           cmS.sent = up.sent;
+
+          if (!(up && up.recieved)) continue;
 
           for (const rid in up.recieved) {
             cmS.recieved[rid] = up.recieved[rid];

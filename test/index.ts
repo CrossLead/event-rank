@@ -1,8 +1,7 @@
-/// <reference path='../typings/main.d.ts' />;
 import * as _ from 'lodash';
 import { expect } from 'chai';
-import { EventRank, Hash, g as gFunc, h as hFunc } from '../lib/index';
-import util from '../lib/util/index';
+import { EventRank, Hash, g as gFunc, h as hFunc } from '../src/index';
+import util from '../src/util/index';
 import * as moment from 'moment';
 import test from 'ava';
 
@@ -50,12 +49,6 @@ const makeTestEvents = () => [
   event(b, a, 9)
 ];
 
-
-test('Assert function should throw on false', () => {
-  expect(util.assert).to.exist;
-  expect(() => util.assert(false, 'throwing false')).to.throw(Error);
-  expect(() => util.assert(true, 'no error')).to.not.throw(Error);
-});
 
 test('last function should produce last element of array', () => {
   expect(util.last).to.exist;
@@ -113,7 +106,7 @@ test('Starting with no ranks, and not iterating, should produce ranks = |C|', ()
 
   const values = <number[]> _(ranks)
     .values()
-    .pluck('value')
+    .map('value')
     .value();
 
   values.forEach(expectVeryClose(1 / 3));
@@ -133,7 +126,7 @@ test('Calculates expected ranks (using buckets) for test data', () => {
     const getRankValues = (er: EventRank) => {
       return <number[]> _(er.ranks)
       .values()
-      .pluck('value')
+      .map('value')
       .value();
     };
 
@@ -149,8 +142,11 @@ test('Calculates expected ranks (using buckets) for test data', () => {
 
     // test one iteration of events
     const firstBucket = bucketed.shift();
+    if (!firstBucket) throw new Error(`No first bucket`);
+
     expect(firstBucket.events[0].from).to.equal(b);
     expect(firstBucket.events[0].to).to.equal(c);
+
     R.step(firstBucket);
     R.done();
     const stepOneRanks = getRankValues(R);
@@ -160,7 +156,9 @@ test('Calculates expected ranks (using buckets) for test data', () => {
       `(${model} model) After one iteration, ranks should still sum to one`
     )(1);
 
-    R.step(bucketed.shift()).done();
+    const bi = bucketed.shift();
+    if (!bi) throw new Error(`No bucketed items left!`);
+    R.step(bi).done();
 
     const lastRanks = [a, b, c, d, e]
       .reduce((o, x) => (o[x] = R.ranks[x], o), <Hash<any>>{});

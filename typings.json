@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "moment": "registry:npm/moment#2.10.5+20160211003958"
-  },
-  "ambientDependencies": {
-    "chai": "registry:dt/chai#3.4.0+20160317120654",
-    "lodash": "registry:dt/lodash#3.10.0+20160330154726"
-  }
-}

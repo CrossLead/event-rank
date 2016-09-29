@@ -2,15 +2,6 @@
  * Utility helper functions
  */
 
-/**
- * Throw error if bool is not satisfied
- */
-export function assert(bool: boolean, message: string, event?: any): void {
-  if (!bool) {
-    eventRankError(`Assertion failed${message ? (': ' + message) : ''}`, event);
-  }
-}
-
 
 /**
  * Wrap an item in an array if it is not already one
@@ -41,7 +32,7 @@ export function last<T>(arr: T[]): T {
  * @param  {Object} [event] (optional) Event object
  * @return {undefined}
  */
-export function eventRankError(message: string, event?: any) {
+export function eventRankError(message: string, event?: any): never {
   message = `event-rank | ${message}`;
   if (event) {
     const pretty = JSON.stringify(event, null, 2);
@@ -52,7 +43,6 @@ export function eventRankError(message: string, event?: any) {
 
 
 export default {
-  assert,
   eventRankError,
   last,
   ensureArray

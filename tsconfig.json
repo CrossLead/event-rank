@@ -3,18 +3,23 @@
     "target": "es6",
     "module": "commonjs",
     "moduleResolution" : "node",
-    "declaration": false,
     "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
     "noImplicitReturns": true,
-    "removeComments": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "removeComments": false,
     "noLib": false,
-    "outDir": "./dist/es6",
-    "inlineSourceMap": true
+    "pretty": true,
+    "outDir": "./dist/es6/",
+    "inlineSourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true
   },
-  "exclude": [
-    "node_modules",
-    "scripts",
-    "typings",
-    "dist"
+  "include": [
+    "src/index.ts",
+    "test/index.ts"
   ]
 }
