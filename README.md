@@ -5,6 +5,10 @@
 
 ### Overview
 
+#### Usage Notes
+
+This library uses the es2015 `Set` type, `Object.assign`, and `Array.from`, so you may need an es6/es2015 polyfill if your environment does not support those features.
+
 #### Algorithms
 
 - `EventRank` provides an implementation of the EventRank algorithm put forth by [O’Madadhain & Smyth, 2005](http://www.datalab.uci.edu/papers/linkkdd05-02.pdf).
@@ -97,5 +101,5 @@ R.step(bucket);
 // if lazily computing, the ranks need to be finished by calling done();
 R.done();
 
-console.log(R.ranks); // => { ranks... }   
+console.log(R.ranks); // => { ranks... }
 ```
