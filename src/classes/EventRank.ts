@@ -8,6 +8,8 @@
  */
 import { eventRankError, ensureArray } from '../util/index';
 
+declare var console: any;
+
 export type EventItem = {
   time: number;
   to?: string | string[];
@@ -239,7 +241,7 @@ export class EventRank {
     for (const prop in thisObject) {
       let p: any;
       if (!((p = thisObject[prop]) instanceof Function)) {
-        out[prop] = p instanceof Set ? [...p] : p;
+        out[prop] = p instanceof Set ? Array.from(p) : p;
       }
     }
 
@@ -388,7 +390,7 @@ export class EventRank {
 
 
   isBucket(b: any): b is Bucket {
-    return b && b.time && Array.isArray(b.events)
+    return b && b.time && Array.isArray(b.events);
   }
 
 
@@ -511,7 +513,7 @@ export class EventRank {
           // if processing bucket, don't apply time updates
           // until all events in bucket have been processed
           if (isBucket && timeUpdates) {
-            const s = timeUpdates[sender]
+            const s = timeUpdates[sender];
             if (s && s.recieved) s.recieved[recipient] = time;
           } else {
             tr[recipient] = time;

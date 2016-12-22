@@ -46,4 +46,4 @@ export default {
   eventRankError,
   last,
   ensureArray
-}
+};

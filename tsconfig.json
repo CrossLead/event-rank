@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "module": "commonjs",
     "moduleResolution" : "node",
     "noImplicitAny": true,
@@ -13,10 +13,13 @@
     "removeComments": false,
     "noLib": false,
     "pretty": true,
-    "outDir": "./dist/es6/",
+    "outDir": "./dist/",
     "inlineSourceMap": true,
     "forceConsistentCasingInFileNames": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "lib": [
+      "es6"
+    ]
   },
   "include": [
     "src/index.ts",

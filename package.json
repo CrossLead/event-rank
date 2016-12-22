@@ -2,28 +2,22 @@
   "name": "event-rank",
   "version": "0.0.5",
   "description": "EventRank implementation in TypeScript",
-  "main": "./dist/node4/src/index.js",
-  "typings": "./dist/node4/src/index.d.ts",
+  "main": "./dist/src/index.js",
+  "typings": "./dist/src/index.d.ts",
   "scripts": {
-    "babel": "bash -c \"./node_modules/.bin/babel ./dist/es6 --out-dir ./dist/node4\"",
-    "watch-babel": "bash -c \"./node_modules/.bin/babel --watch ./dist/es6 --out-dir ./dist/node4\"",
-    "watch-tsc": "bash -c \"./node_modules/typescript/bin/tsc -w -d -p ./\"",
-    "watch": "bash -c \"./node_modules/.bin/concurrently --kill-others 'npm run watch-babel' 'npm run watch-tsc'\"",
-    "build": "bash -c \"rm -rf ./dist/\" && npm run lint && npm run tscompile && npm run babel",
+    "watch": "bash -c \"./node_modules/typescript/bin/tsc -w -d -p ./\"",
+    "build": "bash -c \"rm -rf ./dist/\" && npm run lint && npm run tscompile",
     "pretest": "npm run build",
     "prepublish": "npm test",
     "test": "bash -c \"./node_modules/.bin/ava\"",
     "tscompile": "bash -c \"./node_modules/typescript/bin/tsc -d -p ./\"",
-    "docs": "bash -c \"rm -rf ./docs/ && ./node_modules/typedoc/bin/typedoc --mode file --theme default --experimentalAsyncFunctions --target es6 --out ./docs/ ./src/ && touch ./docs/.nojekyll\"",
+    "docs": "bash -c \"rm -rf ./docs/ && ./node_modules/typedoc/bin/typedoc --mode file --theme default --experimentalAsyncFunctions --target es5 --out ./docs/ ./src/ && touch ./docs/.nojekyll\"",
     "gh-pages": "npm run docs && ./node_modules/gh-pages/bin/gh-pages --dotfiles true -d ./docs/",
     "lint": "bash -c \"./node_modules/tslint/bin/tslint -c ./tslint.json ./{test,lib}/**/*.ts && echo '> \\033[0;32mlinter passed!\\033[0m'\""
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/CrossLead/EventRank.git"
-  },
-  "engines": {
-    "node": ">=4.3.0"
   },
   "keywords": [
     "graph",
@@ -39,41 +33,22 @@
   },
   "homepage": "https://github.com/CrossLead/EventRank",
   "devDependencies": {
-    "@types/chai": "^3.4.34",
-    "@types/lodash": "^4.14.36",
-    "@types/moment": "^2.13.0",
+    "@types/chai": "3.4.34",
+    "@types/lodash": "4.14.36",
+    "@types/moment": "2.13.0",
     "ava": "0.16.0",
-    "babel-cli": "6.16.0",
-    "babel-core": "6.16.0",
-    "babel-polyfill": "6.16.0",
-    "babel-preset-es2015-node4": "2.1.0",
-    "babel-register": "6.16.3",
-    "babelify": "7.3.0",
-    "browserify": "13.1.0",
     "chai": "3.5.0",
-    "concurrently": "3.0.0",
     "gh-pages": "0.11.0",
     "gulp": "3.9.1",
-    "jasmine-core": "2.5.2",
     "lodash": "4.16.2",
     "moment": "2.15.1",
-    "mongodb": "2.2.10",
-    "ts-node": "1.3.0",
     "tslint": "3.15.1",
     "typedoc": "0.4.5",
-    "typescript": "2.0.3",
-    "typings": "1.4.0",
-    "uglifyjs": "2.4.10"
-  },
-  "babel": {
-    "presets": [
-      "es2015-node4"
-    ],
-    "sourceMaps": true
+    "typescript": "2.1.4"
   },
   "ava": {
     "files": [
-      "dist/node4/test/**/*.js"
+      "dist/test/**/*.js"
     ]
   }
 }
