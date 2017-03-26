@@ -34,17 +34,13 @@
   "homepage": "https://github.com/CrossLead/EventRank",
   "devDependencies": {
     "@types/chai": "3.4.34",
-    "@types/lodash": "4.14.36",
-    "@types/moment": "2.13.0",
-    "ava": "0.16.0",
+    "@types/lodash": "4.14.58",
+    "ava": "0.18.2",
     "chai": "3.5.0",
-    "gh-pages": "0.11.0",
-    "gulp": "3.9.1",
     "lodash": "4.16.2",
-    "moment": "2.15.1",
+    "moment": "2.15.0",
     "tslint": "3.15.1",
-    "typedoc": "0.4.5",
-    "typescript": "2.1.4"
+    "typescript": "2.2.1"
   },
   "ava": {
     "files": [
