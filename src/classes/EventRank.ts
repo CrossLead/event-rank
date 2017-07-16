@@ -39,7 +39,7 @@ export type Hash<T> = { [key: string]: T };
 
 
 export type EventRankOptions = {
-  correspondents: string[]; // list of ids invoved in events
+  correspondents?: string[]; // list of ids invoved in events
   ranks?: Hash<Rank> // computed ranks so far
   events?: EventItem[]; // list events associated with ranking algorithm
   correspondanceMatrix?: CorrespondanceMatrix; // tracks send/recive times
